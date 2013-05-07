@@ -1,0 +1,24 @@
+// Assumes polyglot.jar is in classpath
+include "polyglot/parse/java12.cup"
+
+package safeint.parse;
+
+import safeint.types.SafeIntTypeSystem;
+import safeint.ast.SafeIntNodeFactory;
+import polyglot.parse.Name;
+import polyglot.parse.VarDeclarator;
+
+parser Grm extends polyglot.parse.Grm {:
+    public final SafeIntTypeSystem ts;
+    public final SafeIntNodeFactory nf;
+
+    public Grm(Lexer l, TypeSystem t, NodeFactory n, ErrorQueue q) {
+        super(l, t, n, q);
+        ts = (SafeIntTypeSystem) t;
+        nf = (SafeIntNodeFactory) n;
+    }
+:};
+
+start with goal;
+
+// TODO: modify the default Java grammar using PPG operations
