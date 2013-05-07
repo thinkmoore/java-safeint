@@ -9,11 +9,7 @@ import safeint.types.*;
 import polyglot.ast.*;
 import polyglot.types.*;
 import polyglot.util.*;
-import polyglot.visit.*;
 import polyglot.frontend.*;
-import polyglot.main.*;
-
-import java.util.*;
 import java.io.*;
 
 /**
@@ -22,27 +18,33 @@ import java.io.*;
 public class ExtensionInfo extends polyglot.frontend.JLExtensionInfo {
     static {
         // force Topics to load
+        @SuppressWarnings("unused")
         Topics t = new Topics();
     }
 
+    @Override
     public String defaultFileExtension() {
         return "si";
     }
 
+    @Override
     public String compilerName() {
         return "java-safeintc";
     }
 
+    @Override
     public Parser parser(Reader reader, FileSource source, ErrorQueue eq) {
         Lexer lexer = new Lexer_c(reader, source, eq);
         Grm grm = new Grm(lexer, ts, nf, eq);
         return new CupParser(grm, source, eq);
     }
 
+    @Override
     protected NodeFactory createNodeFactory() {
         return new SafeIntNodeFactory_c();
     }
 
+    @Override
     protected TypeSystem createTypeSystem() {
         return new SafeIntTypeSystem_c();
     }
