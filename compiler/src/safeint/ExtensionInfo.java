@@ -10,6 +10,8 @@ import polyglot.ast.*;
 import polyglot.types.*;
 import polyglot.util.*;
 import polyglot.frontend.*;
+import polyglot.frontend.Scheduler;
+
 import java.io.*;
 
 /**
@@ -47,6 +49,11 @@ public class ExtensionInfo extends polyglot.ext.jl5.ExtensionInfo {
     @Override
     protected TypeSystem createTypeSystem() {
         return new SafeIntTypeSystem_c();
+    }
+
+    @Override
+    public Scheduler createScheduler() {
+        return new SafeIntScheduler(this);
     }
 
 }

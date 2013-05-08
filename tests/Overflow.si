@@ -1,0 +1,49 @@
+class C {
+    public static void testLong() {
+        long minLong = Long.MIN_VALUE;
+        long maxLong = Long.MAX_VALUE;
+
+        long minLongOverflow = minLong - 1L;
+        long maxLongOverflow = maxLong + 1L;
+    }
+
+    public static void testInt() {
+        int minInt = Integer.MIN_VALUE;
+        int maxInt = Integer.MAX_VALUE;
+
+        int minIntOverflow = minInt - 1;
+        int maxIntOverflow = maxInt + 1;
+    }
+
+    public static void testShort() {
+        short minShort = Short.MIN_VALUE;
+        short maxShort = Short.MAX_VALUE;
+
+        short minShortOverflow = (short)(minShort - 1);
+        short maxShortOverflow = (short)(maxShort + 1);
+    }
+
+    public static void testByte() {
+        byte minByte = Byte.MIN_VALUE;
+        byte maxByte = Byte.MAX_VALUE;
+
+        byte minByteOverflow = (byte)(minByte - 1);
+        byte maxByteOverflow = (byte)(maxByte + 1);
+    }
+
+    public static void testChar() {
+        char minChar = Character.MIN_VALUE;
+        char maxChar = Character.MAX_VALUE;
+
+        char minCharOverflow = (char)(minChar - 1);
+        char maxCharOverflow = (char)(maxChar + 1);
+    }
+
+    public static void main(String[] args) {
+        testLong();
+        testInt();
+        testShort();
+        testByte();
+        testChar();
+    }
+}
