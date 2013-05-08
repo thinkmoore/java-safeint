@@ -17,7 +17,7 @@ public class IntegerChecks extends AscriptionVisitor {
 
     @Override
     public Expr ascribe(Expr e, Type toType) throws SemanticException {
-        if (e instanceof Binary && toType.isIntOrLess()) {
+        if (e instanceof Binary && toType.isNumeric()) {
             System.out.println("Visiting integer expression: " + e);
         }
         return e;
