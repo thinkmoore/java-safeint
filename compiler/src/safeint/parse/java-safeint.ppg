@@ -1,14 +1,13 @@
 // Assumes polyglot.jar is in classpath
-include "polyglot/parse/java12.cup"
+include "polyglot/ext/jl5/parse/jl5.ppg"
 
 package safeint.parse;
 
 import safeint.types.SafeIntTypeSystem;
 import safeint.ast.SafeIntNodeFactory;
-import polyglot.parse.Name;
-import polyglot.parse.VarDeclarator;
+import polyglot.ext.jl5.parse.*;
 
-parser Grm extends polyglot.parse.Grm {:
+parser Grm extends polyglot.ext.jl5.parse.Grm {:
     public final SafeIntTypeSystem ts;
     public final SafeIntNodeFactory nf;
 

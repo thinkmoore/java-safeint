@@ -3,8 +3,8 @@ package safeint;
 import polyglot.lex.Lexer;
 import safeint.parse.Lexer_c;
 import safeint.parse.Grm;
+import safeint.types.SafeIntTypeSystem_c;
 import safeint.ast.*;
-import safeint.types.*;
 
 import polyglot.ast.*;
 import polyglot.types.*;
@@ -15,7 +15,7 @@ import java.io.*;
 /**
  * Extension information for java-safeint extension.
  */
-public class ExtensionInfo extends polyglot.frontend.JLExtensionInfo {
+public class ExtensionInfo extends polyglot.ext.jl5.ExtensionInfo {
     static {
         // force Topics to load
         @SuppressWarnings("unused")
