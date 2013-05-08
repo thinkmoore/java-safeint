@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import polyglot.ast.NodeFactory;
+import polyglot.ext.jl5.JL5Scheduler;
 import polyglot.frontend.Job;
 import polyglot.frontend.Scheduler;
 import polyglot.frontend.goals.Goal;
@@ -25,8 +26,10 @@ public class InsertChecksGoal extends VisitorGoal {
 
     @Override
     public Collection<Goal> prerequisiteGoals(Scheduler scheduler) {
+        JL5Scheduler jl5scheduler = (JL5Scheduler)scheduler;
         List<Goal> l = new ArrayList<Goal>();
-        l.add(scheduler.TypeChecked(job));
+        l.add(jl5scheduler.TypeChecked(job));
+        l.add(jl5scheduler.SimplifyExpressionsForBoxing(job));
         return l;
     }
 

@@ -1,0 +1,9 @@
+class C {
+    public static void main(String[] args) {
+        Integer maxInt = Integer.MAX_VALUE;
+        Integer minInt = Integer.MIN_VALUE;
+
+        Integer maxIntOverflow = maxInt + (Integer)1;
+        Integer minIntOverflow = minInt - (Integer)1;
+    }
+}

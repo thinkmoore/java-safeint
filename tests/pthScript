@@ -25,6 +25,8 @@
 #      CmdLineArgs  :   additional command line args for the Polyglot 
 #                       compiler; is always enclosed in quotes.
 
-safeint.ExtensionInfo {
+safeint.ExtensionInfo "-d out -assert -noserial -post \"javac\" -morepermissiveinference " {
     Hello.si ;
+    Boxed.si ;
+    Overflow.si ;
 }
