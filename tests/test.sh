@@ -7,4 +7,4 @@ if [ ! -f "$pth" ]; then
   pth=pth
 fi
 
-$pth -classpath ../compiler/classes:../runtime/classes pthScript
+$pth -classpath ../classes:../rt-classes pthScript

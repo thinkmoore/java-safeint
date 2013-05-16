@@ -25,10 +25,10 @@
     <property name="compiler.jar.name" value="${name}.jar"/>
 
     <!-- source directory -->
-    <property name="compiler.src" location="${basedir}/compiler/src" />
+    <property name="compiler.src" location="${basedir}/src" />
 
     <!-- directory for class file targets -->
-    <property name="compiler.classes" location="${basedir}/compiler/classes" />
+    <property name="compiler.classes" location="${basedir}/classes" />
 
     <!-- binaries directory -->
     <property name="bin.dir" location="${basedir}/bin" />
@@ -37,10 +37,10 @@
     <property name="lib.dir" location="${basedir}/lib" />
 
     <!-- runtime source directory -->
-    <property name="runtime.src" location="${basedir}/runtime/src" />
+    <property name="runtime.src" location="${basedir}/rt-src" />
 
     <!-- directory for class file targets of runtime source code -->
-    <property name="runtime.classes" location="${basedir}/runtime/classes" />
+    <property name="runtime.classes" location="${basedir}/rt-classes" />
 
     <!-- distribution directory -->
     <property name="dist" location="${basedir}/dist" />
