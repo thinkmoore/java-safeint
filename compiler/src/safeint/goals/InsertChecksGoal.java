@@ -11,6 +11,7 @@ import polyglot.frontend.Scheduler;
 import polyglot.frontend.goals.Goal;
 import polyglot.frontend.goals.VisitorGoal;
 import polyglot.types.TypeSystem;
+import safeint.SafeIntScheduler;
 import safeint.visit.IntegerChecks;
 
 public class InsertChecksGoal extends VisitorGoal {
@@ -26,10 +27,10 @@ public class InsertChecksGoal extends VisitorGoal {
 
     @Override
     public Collection<Goal> prerequisiteGoals(Scheduler scheduler) {
-        JL5Scheduler jl5scheduler = (JL5Scheduler)scheduler;
+        SafeIntScheduler sischeduler = (SafeIntScheduler)scheduler;
         List<Goal> l = new ArrayList<Goal>();
-        l.add(jl5scheduler.TypeChecked(job));
-        l.add(jl5scheduler.SimplifyExpressionsForBoxing(job));
+        l.add(sischeduler.SimplifyExpressions(job));
+        l.add(sischeduler.TypeChecked(job));
         return l;
     }
 

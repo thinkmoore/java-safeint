@@ -7,6 +7,7 @@ import polyglot.frontend.Job;
 import polyglot.frontend.goals.Goal;
 import polyglot.util.InternalCompilerError;
 import safeint.goals.InsertChecksGoal;
+import safeint.goals.SimplifyExpressionsGoal;
 
 public class SafeIntScheduler extends JL5Scheduler {
 
@@ -16,6 +17,10 @@ public class SafeIntScheduler extends JL5Scheduler {
     
     public Goal InsertChecks(final Job job) {
         return InsertChecksGoal.create(this, job, extInfo.nodeFactory(), extInfo.typeSystem());
+    }
+    
+    public Goal SimplifyExpressions(final Job job) {
+        return SimplifyExpressionsGoal.create(this, job, extInfo.nodeFactory(), extInfo.typeSystem());
     }
 
     @Override

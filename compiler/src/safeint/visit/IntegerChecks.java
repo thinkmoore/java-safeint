@@ -65,11 +65,7 @@ public class IntegerChecks extends AscriptionVisitor {
     protected Id unaryMethod(Unary u, Position p) {
         Unary.Operator op = u.operator();
         if (op == Unary.NEG) return this.nodeFactory().Id(p, "neg");
-        if (op == Unary.POST_INC) return this.nodeFactory().Id(p, "postinc");
-        if (op == Unary.POST_DEC) return this.nodeFactory().Id(p, "postdec");
-        if (op == Unary.PRE_INC) return this.nodeFactory().Id(p, "preinc");
-        if (op == Unary.PRE_DEC) return this.nodeFactory().Id(p, "predec");
-        return null;
+        throw new InternalCompilerError("Unexpected unary operator " + op + "!");
     }
     
     protected Id castMethod(Cast c, Position p) {
