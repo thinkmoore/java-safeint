@@ -1,5 +1,10 @@
-/* Java 1.4 scanner for JFlex.
- * Based on JLS, 2ed, Chapter 3.
+/*
+ * Java 1.5 scanner for JFlex.  Based on JLS, 3ed, Chapter 3.
+ *
+ * This file is part of the Polyglot extensible compiler framework.
+ *
+ * Copyright (c) 2000-2012 Polyglot project group, Cornell University
+ * 
  */
 
 package safeint.parse;
@@ -14,6 +19,7 @@ import polyglot.frontend.FileSource;
 import java.util.HashMap;
 import java.math.BigInteger;
 
+@SuppressWarnings("all")
 %%
 
 %public
@@ -27,6 +33,8 @@ import java.math.BigInteger;
 
 %line
 %column
+
+%buffer 1048576
 
 %state STRING, CHARACTER, TRADITIONAL_COMMENT, END_OF_LINE_COMMENT
 
@@ -46,6 +54,7 @@ import java.math.BigInteger;
         init_keywords();
     }
 
+
     protected void init_keywords() {
         keywords.put("abstract",      new Integer(sym.ABSTRACT));
         keywords.put("assert",        new Integer(sym.ASSERT));
@@ -62,6 +71,7 @@ import java.math.BigInteger;
         keywords.put("do",            new Integer(sym.DO));
         keywords.put("double",        new Integer(sym.DOUBLE));
         keywords.put("else",          new Integer(sym.ELSE));
+        keywords.put("enum",          new Integer(sym.ENUM));
         keywords.put("extends",       new Integer(sym.EXTENDS));
         keywords.put("final",         new Integer(sym.FINAL));
         keywords.put("finally",       new Integer(sym.FINALLY));
@@ -147,28 +157,28 @@ import java.math.BigInteger;
         if (x.bitLength() > bits && ! boundary) {
             eq.enqueue(ErrorInfo.LEXICAL_ERROR, "Long literal \"" +
                         yytext() + "\" out of range.", pos());
-        }
+            }
         return new LongLiteral(pos(), x.longValue(),
                 boundary ? sym.LONG_LITERAL_BD : sym.LONG_LITERAL);
-    }
+            }
 
     private Token float_lit(String s) {
         try {
             Float x = Float.valueOf(s);
-	    boolean zero = true;
-	    for (int i = 0; i < s.length(); i++) {
-		if ('1' <= s.charAt(i) && s.charAt(i) <= '9') {
-		    zero = false;
-		    break;
-		}
+            boolean zero = true;
+            for (int i = 0; i < s.length(); i++) {
+                if ('1' <= s.charAt(i) && s.charAt(i) <= '9') {
+                    zero = false;
+                    break;
+                }
                 if (s.charAt(i) == 'e' || s.charAt(i) == 'E') {
                     break; // 0e19 is still 0
                 }
-	    }
-	    if (x.isInfinite() || x.isNaN() || (x.floatValue() == 0 && ! zero)) {
-		eq.enqueue(ErrorInfo.LEXICAL_ERROR,
-			   "Illegal float literal \"" + yytext() + "\"", pos());
-	    }
+            }
+            if (x.isInfinite() || x.isNaN() || (x.floatValue() == 0 && ! zero)) {
+                eq.enqueue(ErrorInfo.LEXICAL_ERROR,
+                           "Illegal float literal \"" + yytext() + "\"", pos());
+            }
             return new FloatLiteral(pos(), x.floatValue(), sym.FLOAT_LITERAL);
         }
         catch (NumberFormatException e) {
@@ -181,20 +191,20 @@ import java.math.BigInteger;
     private Token double_lit(String s) {
         try {
             Double x = Double.valueOf(s);
-	    boolean zero = true;
-	    for (int i = 0; i < s.length(); i++) {
-		if ('1' <= s.charAt(i) && s.charAt(i) <= '9') {
-		    zero = false;
-		    break;
-		}
+            boolean zero = true;
+            for (int i = 0; i < s.length(); i++) {
+                if ('1' <= s.charAt(i) && s.charAt(i) <= '9') {
+                    zero = false;
+                    break;
+                }
                 if (s.charAt(i) == 'e' || s.charAt(i) == 'E') {
                     break; // 0e19 is still 0
                 }
-	    }
-	    if (x.isInfinite() || x.isNaN() || (x.doubleValue() == 0 && ! zero)) {
-		eq.enqueue(ErrorInfo.LEXICAL_ERROR,
-			   "Illegal double literal \"" + yytext() + "\"", pos());
-	    }
+            }
+            if (x.isInfinite() || x.isNaN() || (x.doubleValue() == 0 && ! zero)) {
+                eq.enqueue(ErrorInfo.LEXICAL_ERROR,
+                           "Illegal double literal \"" + yytext() + "\"", pos());
+            }
             return new DoubleLiteral(pos(), x.doubleValue(), sym.DOUBLE_LITERAL);
         }
         catch (NumberFormatException e) {
@@ -275,12 +285,25 @@ HexNumeral = 0 [xX] [0-9a-fA-F]+
 OctalNumeral = 0 [0-7]+
 
 /* 3.10.2 Floating-Point Literals */
-FloatingPointLiteral = [0-9]+ "." [0-9]* {ExponentPart}?
-                     | "." [0-9]+ {ExponentPart}?
-                     | [0-9]+ {ExponentPart}
+FloatingPointLiteral = {DecimalFloatingPointLiteral} | {HexadecimalFloatingPointLiteral}
 
+DecimalFloatingPointLiteral = [0-9]+ "." [0-9]* {ExponentPart}? {FloatTypeSuffix}?
+                     | "." [0-9]+ {ExponentPart}? {FloatTypeSuffix}?
+                     | [0-9]+ {ExponentPart} {FloatTypeSuffix}?
+                     | [0-9]+ {ExponentPart}? {FloatTypeSuffix}
+                     
 ExponentPart = [eE] {SignedInteger}
 SignedInteger = [-+]? [0-9]+
+
+HexadecimalFloatingPointLiteral = {HexSignificand} {BinaryExponent} {FloatTypeSuffix}?
+                     
+HexSignificand = {HexNumeral} 
+               | {HexNumeral} "." 
+               | 0 [xX] [0-9a-fA-F]* "." [0-9a-fA-F]+  
+
+BinaryExponent = [pP] {SignedInteger}
+FloatTypeSuffix = [fFdD]
+
 
 /* 3.10.4 Character Literals */
 OctalEscape = \\ [0-7]
@@ -362,6 +385,8 @@ OctalEscape = \\ [0-7]
     "<<="  { return op(sym.LSHIFTEQ);   }
     ">>="  { return op(sym.RSHIFTEQ);   }
     ">>>=" { return op(sym.URSHIFTEQ);  }
+    "@"    { return op(sym.AT);         }
+    "..."    { return op(sym.ELLIPSIS);         }
 
     /* 3.10.1 Integer Literals */
     {OctalNumeral} [lL]          { return long_lit(chop(), 8); }
