@@ -1,5 +1,6 @@
 package safeint;
 
+import polyglot.lex.EscapedUnicodeReader;
 import polyglot.lex.Lexer;
 import safeint.parse.Lexer_c;
 import safeint.parse.Grm;
@@ -10,7 +11,6 @@ import polyglot.ast.*;
 import polyglot.types.*;
 import polyglot.util.*;
 import polyglot.frontend.*;
-import polyglot.frontend.Scheduler;
 
 import java.io.*;
 
@@ -36,6 +36,7 @@ public class ExtensionInfo extends polyglot.ext.jl5.ExtensionInfo {
 
     @Override
     public Parser parser(Reader reader, FileSource source, ErrorQueue eq) {
+        reader = new EscapedUnicodeReader(reader);
         Lexer lexer = new Lexer_c(reader, source, eq);
         Grm grm = new Grm(lexer, ts, nf, eq);
         return new CupParser(grm, source, eq);

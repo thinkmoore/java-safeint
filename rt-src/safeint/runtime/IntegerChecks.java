@@ -168,6 +168,24 @@ public abstract class IntegerChecks {
         return a >>> b;
     }
     
+    // negation
+    public static int neg(int n) {
+        int result = -n;
+        long expected = -((long)n);
+        if (result != expected) {
+            log("Integer overflow", "-(int)" + n, Integer.toString(result), Long.toString(expected));
+        }
+        return result;
+    }
+    public static long neg(long n) {
+        long result = -n;
+        BigInteger expected = BigInteger.valueOf(n).negate();
+        if (!expected.equals(BigInteger.valueOf(result))) {
+            log("Integer overflow", "-(long)" + n, Long.toString(result), expected.toString());
+        }
+        return result;
+    }
+    
     // Casts
     public static short shortCast(long n) {
         short result = (short)n;

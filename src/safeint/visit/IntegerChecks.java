@@ -26,7 +26,7 @@ public class IntegerChecks extends AscriptionVisitor {
     
     @Override
     public Expr ascribe(Expr e, Type toType) throws SemanticException {
-        if (!e.type().isNumeric()) {
+        if (!e.type().isLongOrLess()) {
             return e;
         }
         
@@ -34,10 +34,10 @@ public class IntegerChecks extends AscriptionVisitor {
         Receiver marker = markerClass(pos);
         Expr result = e;
         
-        if (e instanceof Binary) {
+        if (e instanceof Binary && instrumentBinary((Binary) e)) {
             Binary b = (Binary)e;
             result = this.nodeFactory().Call(pos, marker, binaryMethod(b,pos), b.left(), b.right());
-        } else if (e instanceof Unary) {
+        } else if (e instanceof Unary && instrumentUnary((Unary) e)) {
             Unary u = (Unary)e;
             result = this.nodeFactory().Call(pos, marker, unaryMethod(u,pos), u.expr());
         } else if (e instanceof Cast) {
@@ -49,17 +49,29 @@ public class IntegerChecks extends AscriptionVisitor {
         return result;
     }
     
+    protected boolean instrumentBinary(Binary b) {
+        Binary.Operator op = b.operator();
+        return (op == Binary.ADD || op == Binary.SUB || op == Binary.MUL
+                || op == Binary.DIV || op == Binary.SHL
+                || op == Binary.SHR || op == Binary.USHR);
+        // XXX REM?
+    }
+    
+    protected boolean instrumentUnary(Unary u) {
+        return (!u.expr().isConstant() && (u.operator().equals(Unary.NOT)));
+    }
+    
     protected Id binaryMethod(Binary b, Position p) {
         Binary.Operator op = b.operator();
         if (op == Binary.ADD) return this.nodeFactory().Id(p, "add");
         if (op == Binary.SUB) return this.nodeFactory().Id(p, "sub");
         if (op == Binary.MUL) return this.nodeFactory().Id(p, "mul");
         if (op == Binary.DIV) return this.nodeFactory().Id(p, "div");
-        if (op == Binary.MOD) return this.nodeFactory().Id(p, "rem");
+        //if (op == Binary.MOD) return this.nodeFactory().Id(p, "rem");
         if (op == Binary.SHL) return this.nodeFactory().Id(p, "shl");
         if (op == Binary.SHR) return this.nodeFactory().Id(p, "shr");
         if (op == Binary.USHR) return this.nodeFactory().Id(p, "ushr");
-        return null;
+        throw new InternalCompilerError("Unexpected binary operator " + op + "!");
     }
     
     protected Id unaryMethod(Unary u, Position p) {

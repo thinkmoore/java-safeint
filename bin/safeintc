@@ -120,7 +120,7 @@ done
 
 unixclasspath=`unixpath $CLASSPATH`
 classpath="$extra_cp"
-classpath="$classpath:$dir/compiler/classes:$dir/runtime/classes:$dir/lib/polyglot.jar:$dir/lib/JFlex.jar"
+classpath="$classpath:$dir/classes:$dir/rt-classes:$dir/lib/polyglot.jar:$dir/lib/JFlex.jar"
 
 PATH_unix=`unixpath $PATH`
 
