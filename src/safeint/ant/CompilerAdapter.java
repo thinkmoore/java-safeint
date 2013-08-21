@@ -41,7 +41,8 @@ public class CompilerAdapter extends DefaultCompilerAdapter {
                 continue;
             }
             if (args[i].equals("-encoding")) {
-                if (!args[++i].equalsIgnoreCase("UTF-8")) {
+            	String encoding = args[++i];
+                if (!(encoding.equalsIgnoreCase("UTF-8") || encoding.equalsIgnoreCase("ISO-8859-1"))) {
                     throw new InternalCompilerError("Unsupported encoding " + args[i]);
                 }
                 continue;
@@ -49,14 +50,20 @@ public class CompilerAdapter extends DefaultCompilerAdapter {
             if (args[i].equals("-O")) {
                 continue;
             }
+            if (args[i].startsWith("-X")) {
+            	continue;
+            }
             safeintc.createArgument().setValue(args[i]);
         }
+        safeintc.createArgument().setValue("-morepermissiveinference");
+        safeintc.createArgument().setValue("-morepermissivecasts");
         safeintc.createArgument().setValue("-post");
         safeintc.createArgument().setValue(post.toString());
         safeintc.createArgument().setValue("-j");
         safeintc.createArgument().setValue("-Xmx4g");
         logAndAddFilesToCompile(safeintc);
         
+        attributes.log("Invoking safeintc with: " + safeintc.toString(), Project.MSG_INFO);
         return executeExternalCompile(safeintc.getCommandline(), safeintc.size(), true) == 0;
     }
 
