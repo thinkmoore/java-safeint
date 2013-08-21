@@ -1,0 +1,30 @@
+SafeInt: arithmetic check failed at <C.testLong:Overflow.java line 6> :
+	Integer overflow
+	(long)-9223372036854775808 - (long)1 = 9223372036854775807, expected -9223372036854775809
+SafeInt: arithmetic check failed at <C.testLong:Overflow.java line 7> :
+	Integer overflow
+	(long)9223372036854775807 + (long)1 = -9223372036854775808, expected 9223372036854775808
+SafeInt: arithmetic check failed at <C.testInt:Overflow.java line 13> :
+	Integer overflow
+	(int)-2147483648 - (int)1 = 2147483647, expected -2147483649
+SafeInt: arithmetic check failed at <C.testInt:Overflow.java line 14> :
+	Integer overflow
+	(int)2147483647 + (int)1 = -2147483648, expected 2147483648
+SafeInt: arithmetic check failed at <C.testShort:Overflow.java line 20> :
+	Truncation
+	(short)((int)-32769) = 32767, expected -32769
+SafeInt: arithmetic check failed at <C.testShort:Overflow.java line 21> :
+	Truncation
+	(short)((int)32768) = -32768, expected 32768
+SafeInt: arithmetic check failed at <C.testByte:Overflow.java line 27> :
+	Truncation
+	(byte)((int)-129) = 127, expected -129
+SafeInt: arithmetic check failed at <C.testByte:Overflow.java line 28> :
+	Truncation
+	(byte)((int)128) = -128, expected 128
+SafeInt: arithmetic check failed at <C.testChar:Overflow.java line 34> :
+	Truncation
+	(char)((int)-1) = 65535, expected -1
+SafeInt: arithmetic check failed at <C.testChar:Overflow.java line 35> :
+	Truncation
+	(char)((int)65536) = 0, expected 65536

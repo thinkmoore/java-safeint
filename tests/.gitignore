@@ -1,3 +1,4 @@
 pthScript.results
 *.class
 *.java
+/tmp

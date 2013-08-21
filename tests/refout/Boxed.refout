@@ -1,0 +1,6 @@
+SafeInt: arithmetic check failed at <C.main:Boxed.java line 6> :
+	Integer overflow
+	(int)2147483647 + (int)1 = -2147483648, expected 2147483648
+SafeInt: arithmetic check failed at <C.main:Boxed.java line 7> :
+	Integer overflow
+	(int)-2147483648 - (int)1 = 2147483647, expected -2147483649
