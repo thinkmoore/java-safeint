@@ -133,6 +133,31 @@ public abstract class IntegerChecks {
         return result;
     }
     
+    // mod / rem
+    public static int mod(int a, int b) {
+        if (b == 0) {
+            log("Division by zero", "(int)" + a + " % (int)" + b);
+        }
+        int result = a % b;
+        long expected = (long)a % (long)b;
+        if (result != expected) {
+            log("Integer overflow", "(int)" + a + " % (int)" + b, Integer.toString(result), Long.toString(expected));
+        }
+        return result;
+    }
+    
+    public static long mod(long a, long b) {
+        if (b == 0) {
+            log("Division by zero", "(long)" + a + " % (long)" + b);
+        }
+        long result = a % b;
+        BigInteger expected = BigInteger.valueOf(a).remainder(BigInteger.valueOf(b));
+        if (!expected.equals(BigInteger.valueOf(result))) {
+            log("Integer overflow", "(long)" + a + " % (long)" + b, Long.toString(result), expected.toString());
+        }
+        return result;
+    }
+    
     // Left shift
     public static int shl(int a, int b) {
         int result = a << b;

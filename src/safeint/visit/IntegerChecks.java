@@ -51,10 +51,10 @@ public class IntegerChecks extends AscriptionVisitor {
     
     protected boolean instrumentBinary(Binary b) {
         Binary.Operator op = b.operator();
-        return (op == Binary.ADD || op == Binary.SUB || op == Binary.MUL
+        return (op == Binary.ADD || op == Binary.SUB
+        		|| op == Binary.MUL || op == Binary.MOD
                 || op == Binary.DIV || op == Binary.SHL
                 || op == Binary.SHR || op == Binary.USHR);
-        // XXX REM?
     }
     
     protected boolean instrumentUnary(Unary u) {
@@ -67,7 +67,7 @@ public class IntegerChecks extends AscriptionVisitor {
         if (op == Binary.SUB) return this.nodeFactory().Id(p, "sub");
         if (op == Binary.MUL) return this.nodeFactory().Id(p, "mul");
         if (op == Binary.DIV) return this.nodeFactory().Id(p, "div");
-        //if (op == Binary.MOD) return this.nodeFactory().Id(p, "rem");
+        if (op == Binary.MOD) return this.nodeFactory().Id(p, "mod");
         if (op == Binary.SHL) return this.nodeFactory().Id(p, "shl");
         if (op == Binary.SHR) return this.nodeFactory().Id(p, "shr");
         if (op == Binary.USHR) return this.nodeFactory().Id(p, "ushr");
