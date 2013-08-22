@@ -1,16 +1,13 @@
 package safeint.ant;
 
+import java.io.File;
+
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.compilers.DefaultCompilerAdapter;
 import org.apache.tools.ant.types.Commandline;
-import org.apache.tools.ant.types.Path;
 
-import polyglot.main.Options;
 import polyglot.util.InternalCompilerError;
-
-import safeint.ExtensionInfo;
-import safeint.SafeIntScheduler;
 
 public class CompilerAdapter extends DefaultCompilerAdapter {
     
@@ -61,10 +58,16 @@ public class CompilerAdapter extends DefaultCompilerAdapter {
         safeintc.createArgument().setValue(post.toString());
         safeintc.createArgument().setValue("-j");
         safeintc.createArgument().setValue("-Xmx4g");
-        logAndAddFilesToCompile(safeintc);
+        
+        // Add files to be compiled
+        for (File file : compileList) {
+        	String arg = file.getAbsolutePath();
+        	if (!arg.endsWith("package-info.java")) {
+        		safeintc.createArgument().setValue(arg);
+        	}
+        }
         
         attributes.log("Invoking safeintc with: " + safeintc.toString(), Project.MSG_INFO);
         return executeExternalCompile(safeintc.getCommandline(), safeintc.size(), true) == 0;
     }
-
 }
