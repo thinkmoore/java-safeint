@@ -29,6 +29,10 @@ public class IntegerChecks extends AscriptionVisitor {
         if (!e.type().isLongOrLess()) {
             return e;
         }
+        assert e.constantValueSet();
+        if (e.isConstant()) {
+        	return e;
+        }
         
         Position pos = e.position();
         Receiver marker = markerClass(pos);
