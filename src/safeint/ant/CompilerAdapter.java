@@ -6,6 +6,7 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.compilers.DefaultCompilerAdapter;
 import org.apache.tools.ant.types.Commandline;
+import org.apache.tools.ant.types.Path;
 
 import polyglot.util.InternalCompilerError;
 
@@ -17,6 +18,7 @@ public class CompilerAdapter extends DefaultCompilerAdapter {
        
         Commandline safeintc = new Commandline();
         safeintc.setExecutable("safeintc");
+        
         Commandline post = new Commandline();
         post.setExecutable("javac");
         setupModernJavacCommandlineSwitches(post);
@@ -54,8 +56,8 @@ public class CompilerAdapter extends DefaultCompilerAdapter {
         }
         safeintc.createArgument().setValue("-morepermissiveinference");
         safeintc.createArgument().setValue("-morepermissivecasts");
-        safeintc.createArgument().setValue("-post");
-        safeintc.createArgument().setValue(post.toString());
+        /*safeintc.createArgument().setValue("-post");
+        safeintc.createArgument().setValue(post.toString());*/
         safeintc.createArgument().setValue("-j");
         safeintc.createArgument().setValue("-Xmx4g");
         
