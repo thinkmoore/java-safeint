@@ -228,6 +228,11 @@ public abstract class IntegerChecks {
         return result;
     }
     
+    // don't check casts from float or double
+    public static short shortCast(double n) {
+    	return (short) n;
+    }
+    
     public static char charCast(long n) {
         char result = (char)n;
         if (result != n) {
@@ -242,6 +247,11 @@ public abstract class IntegerChecks {
             log("Truncation", "(char)((int)" + n + ")", Integer.toString(result), Integer.toString(n));
         }
         return result;
+    }
+    
+    // don't check casts from float or double
+    public static char charCast(double n) {
+    	return (char) n;
     }
     
     public static byte byteCast(long n) {
@@ -260,6 +270,11 @@ public abstract class IntegerChecks {
         return result;
     }
     
+    // don't check casts from float or double
+    public static byte byteCast(double n) {
+    	return (byte) n;
+    }
+    
     public static int intCast(long n) {
         int result = (int)n;
         if (result != n) {
@@ -268,8 +283,18 @@ public abstract class IntegerChecks {
         return result;
     }
     
+    // don't check casts from float or double
+    public static int intCast(double n) {
+    	return (int) n;
+    }
+    
     // no op
     public static long longCast(long l) {
         return l;
+    }
+    
+    // don't check casts from float or double
+    public static long longCast(double n) {
+    	return (long) n;
     }
 }
