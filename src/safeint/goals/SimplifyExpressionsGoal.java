@@ -11,7 +11,6 @@ import polyglot.frontend.Scheduler;
 import polyglot.frontend.goals.Goal;
 import polyglot.frontend.goals.VisitorGoal;
 import polyglot.types.TypeSystem;
-import safeint.visit.IntegerChecks;
 import safeint.visit.SimplifyExpressions;
 
 public class SimplifyExpressionsGoal extends VisitorGoal {
