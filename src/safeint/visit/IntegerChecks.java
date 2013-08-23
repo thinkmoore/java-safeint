@@ -1,11 +1,9 @@
 package safeint.visit;
 
 import polyglot.ast.Binary;
-import polyglot.ast.Call;
 import polyglot.ast.Cast;
 import polyglot.ast.Expr;
 import polyglot.ast.Id;
-import polyglot.ast.Node;
 import polyglot.ast.NodeFactory;
 import polyglot.ast.Receiver;
 import polyglot.ast.TypeNode;
@@ -17,11 +15,14 @@ import polyglot.types.TypeSystem;
 import polyglot.util.InternalCompilerError;
 import polyglot.util.Position;
 import polyglot.visit.AscriptionVisitor;
+import safeint.SafeIntOptions;
 
 public class IntegerChecks extends AscriptionVisitor {
-
+	private final boolean instrumentShifts;
+	
     public IntegerChecks(Job job, TypeSystem ts, NodeFactory nf) {
         super(job, ts, nf);
+        this.instrumentShifts = ((SafeIntOptions) job.extensionInfo().getOptions()).instrumentShifts;
     }
     
     @Override
@@ -55,10 +56,15 @@ public class IntegerChecks extends AscriptionVisitor {
     
     protected boolean instrumentBinary(Binary b) {
         Binary.Operator op = b.operator();
-        return (op == Binary.ADD || op == Binary.SUB
-        		|| op == Binary.MUL || op == Binary.MOD
-                || op == Binary.DIV || op == Binary.SHL
-                || op == Binary.SHR || op == Binary.USHR);
+        return (op == Binary.ADD
+             || op == Binary.SUB
+        	 || op == Binary.MUL
+        	 || op == Binary.MOD
+             || op == Binary.DIV
+             || (instrumentShifts &&
+                  (op == Binary.SHL
+                || op == Binary.SHR
+                || op == Binary.USHR)));
     }
     
     protected boolean instrumentUnary(Unary u) {

@@ -58,6 +58,7 @@ public class CompilerAdapter extends DefaultCompilerAdapter {
         safeintc.createArgument().setValue("-morepermissivecasts");
         safeintc.createArgument().setValue("-j");
         safeintc.createArgument().setValue("-Xmx4g");
+        propertyArgument(safeintc, "safeint.instrumentShifts", "-instrumentShifts", false);
         
         // Add files to be compiled
         for (File file : compileList) {
@@ -70,4 +71,25 @@ public class CompilerAdapter extends DefaultCompilerAdapter {
         attributes.log("Invoking safeintc with: " + safeintc.toString(), Project.MSG_INFO);
         return executeExternalCompile(safeintc.getCommandline(), safeintc.size(), true) == 0;
     }
+    
+    private void propertyArgument(Commandline cmd, String property, String flag, boolean value, String defValue) {
+		String propValue = project.getProperty(property);
+		if (propValue != null) {
+			cmd.createArgument().setValue(flag);
+			if (value && !propValue.equals("")) {
+				cmd.createArgument().setValue(propValue);
+			} else if (value && defValue != null) {
+				cmd.createArgument().setValue(defValue);
+			}
+		} else {
+		    if (value && defValue != null) {
+		        cmd.createArgument().setValue(flag);
+		        cmd.createArgument().setValue(defValue);
+		    }
+		}
+	}
+
+	private void propertyArgument(Commandline cmd, String property, String flag, boolean value) {
+		propertyArgument(cmd,property,flag,value,null);
+	}
 }

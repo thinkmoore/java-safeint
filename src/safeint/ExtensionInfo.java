@@ -2,6 +2,7 @@ package safeint;
 
 import polyglot.lex.EscapedUnicodeReader;
 import polyglot.lex.Lexer;
+import polyglot.main.Options;
 import safeint.parse.Lexer_c;
 import safeint.parse.Grm;
 import safeint.types.SafeIntTypeSystem_c;
@@ -10,6 +11,7 @@ import safeint.ast.*;
 import polyglot.ast.*;
 import polyglot.types.*;
 import polyglot.util.*;
+import polyglot.ext.jl5.JL5Options;
 import polyglot.frontend.*;
 
 import java.io.*;
@@ -56,5 +58,9 @@ public class ExtensionInfo extends polyglot.ext.jl5.ExtensionInfo {
     public Scheduler createScheduler() {
         return new SafeIntScheduler(this);
     }
-
+    
+    @Override
+    public Options createOptions() {
+    	return new SafeIntOptions(this);
+    }
 }
