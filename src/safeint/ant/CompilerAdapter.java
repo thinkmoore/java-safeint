@@ -56,8 +56,6 @@ public class CompilerAdapter extends DefaultCompilerAdapter {
         }
         safeintc.createArgument().setValue("-morepermissiveinference");
         safeintc.createArgument().setValue("-morepermissivecasts");
-        /*safeintc.createArgument().setValue("-post");
-        safeintc.createArgument().setValue(post.toString());*/
         safeintc.createArgument().setValue("-j");
         safeintc.createArgument().setValue("-Xmx4g");
         
