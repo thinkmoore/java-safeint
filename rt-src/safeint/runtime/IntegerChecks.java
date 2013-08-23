@@ -297,4 +297,6 @@ public abstract class IntegerChecks {
     public static long longCast(double n) {
     	return (long) n;
     }
+    
+    public static void checkTaint(long n) { }
 }
