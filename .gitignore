@@ -2,3 +2,5 @@ classes
 rt-classes
 .classpath
 .project
+/dist
+/doc
