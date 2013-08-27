@@ -298,5 +298,9 @@ public abstract class IntegerChecks {
     	return (long) n;
     }
     
-    public static void checkTaint(long n) { }
+    public static byte checkByteTaint(byte n) { return n; }
+    public static char checkCharTaint(char n) { return n; }
+    public static short checkShortTaint(short n) { return n; }
+    public static int checkIntTaint(int n) { return n; }
+    public static long checkLongTaint(long n) { return n; }
 }

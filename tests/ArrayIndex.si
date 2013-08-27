@@ -1,0 +1,8 @@
+class C {
+    public static void main(String[] args) {
+        int input = Integer.parseInt(args[0]);
+        int value = Integer.MAX_VALUE;
+        int test = value + input;
+        System.out.println(args[test]);
+    }
+}

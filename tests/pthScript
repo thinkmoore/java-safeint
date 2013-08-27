@@ -29,4 +29,5 @@ safeint.ExtensionInfo "-d tmp -assert -noserial -post \"./compare.sh\"" {
     Hello.si ;
     Boxed.si ;
     Overflow.si ;
+    ArrayIndex.si ;
 }

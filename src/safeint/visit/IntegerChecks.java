@@ -1,5 +1,6 @@
 package safeint.visit;
 
+import polyglot.ast.ArrayAccess;
 import polyglot.ast.Binary;
 import polyglot.ast.Cast;
 import polyglot.ast.Expr;
@@ -9,45 +10,62 @@ import polyglot.ast.Receiver;
 import polyglot.ast.TypeNode;
 import polyglot.ast.Unary;
 import polyglot.frontend.Job;
+import polyglot.types.PrimitiveType;
 import polyglot.types.SemanticException;
 import polyglot.types.Type;
 import polyglot.types.TypeSystem;
 import polyglot.util.InternalCompilerError;
 import polyglot.util.Position;
 import polyglot.visit.AscriptionVisitor;
+import polyglot.visit.DeepCopy;
 import safeint.SafeIntOptions;
 
 public class IntegerChecks extends AscriptionVisitor {
 	private final boolean instrumentShifts;
+	private final DeepCopy deepCopier;
 	
     public IntegerChecks(Job job, TypeSystem ts, NodeFactory nf) {
         super(job, ts, nf);
         this.instrumentShifts = ((SafeIntOptions) job.extensionInfo().getOptions()).instrumentShifts;
+        this.deepCopier = new DeepCopy();
     }
     
     @Override
     public Expr ascribe(Expr e, Type toType) throws SemanticException {
-        if (!e.type().isLongOrLess()) {
-            return e;
-        }
-        assert e.constantValueSet();
-        if (e.isConstant()) {
-        	return e;
-        }
-        
-        Position pos = e.position();
+    	Position pos = e.position();
         Receiver marker = markerClass(pos);
         Expr result = e;
         
-        if (e instanceof Binary && instrumentBinary((Binary) e)) {
-            Binary b = (Binary)e;
-            result = this.nodeFactory().Call(pos, marker, binaryMethod(b,pos), b.left(), b.right());
-        } else if (e instanceof Unary && instrumentUnary((Unary) e)) {
-            Unary u = (Unary)e;
-            result = this.nodeFactory().Call(pos, marker, unaryMethod(u,pos), u.expr());
-        } else if (e instanceof Cast) {
-            Cast c = (Cast)e;
-            result = this.nodeFactory().Call(pos, marker, castMethod((Cast)e,pos), c.expr());
+    	if (e instanceof ArrayAccess) {
+        	ArrayAccess aa = (ArrayAccess) e;
+        	Expr idx = aa.index();
+        	assert idx.constantValueSet();
+        	if (idx.isConstant()) {
+        		return e;
+        	}
+        	
+        	Expr checkedIdx = this.nodeFactory().Call(pos, marker, checkMethod(pos,idx.type().toPrimitive()), idx);
+        	aa = (ArrayAccess) aa.visit(deepCopier);
+        	result = aa.index(checkedIdx);
+        } else {
+	    	if (!e.type().isLongOrLess()) {
+	            return e;
+	        }
+	        assert e.constantValueSet();
+	        if (e.isConstant()) {
+	        	return e;
+	        }
+	        
+	        if (e instanceof Binary && instrumentBinary((Binary) e)) {
+	            Binary b = (Binary)e;
+	            result = this.nodeFactory().Call(pos, marker, binaryMethod(b,pos), b.left(), b.right());
+	        } else if (e instanceof Unary && instrumentUnary((Unary) e)) {
+	            Unary u = (Unary)e;
+	            result = this.nodeFactory().Call(pos, marker, unaryMethod(u,pos), u.expr());
+	        } else if (e instanceof Cast) {
+	            Cast c = (Cast)e;
+	            result = this.nodeFactory().Call(pos, marker, castMethod((Cast)e,pos), c.expr());
+	        }
         }
         
         result.type(toType);
@@ -92,6 +110,12 @@ public class IntegerChecks extends AscriptionVisitor {
     
     protected Id castMethod(Cast c, Position p) {
         return this.nodeFactory().Id(p, c.castType().name() + "Cast");
+    }
+    
+    protected Id checkMethod(Position p, PrimitiveType pt) {
+    	String typeName = pt.name();
+    	typeName = Character.toUpperCase(typeName.charAt(0)) + typeName.substring(1);
+    	return this.nodeFactory().Id(p, "check" + typeName + "Taint");
     }
     
     protected Receiver markerClass(Position p) {
